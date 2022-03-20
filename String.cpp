@@ -60,10 +60,18 @@ Rückgabe:
 */
 
 String::String(const char *s) {
-  // TODO
-  size = strlen(s);
+  size = 0;
+  	// Bekomme die Länge des passenden Strings und setze Objekt Parameter
+  while (*(s + size) != '\0') {
+	  size++;
+  }
+
   str = new char[size + 1];
-  memcpy(str, s, size);
+
+	// Kopiere ein String
+  for (int i = 0; i <= size; i++) {
+	  str[i] = s[i];
+  }
 }
 
 /*
@@ -81,8 +89,11 @@ Rückgabe:
 */
 
 String::String(const String& s) {
-  // TODO
-  str = String(s.str);
+  size = s.size;
+  str = new char[size + 1];
+  for (int i = 0; i <= size; i++) {
+	  str[i] = s.str[i];
+  }
 }
 
 
@@ -102,8 +113,9 @@ Rückgabe:
 */
 
 String::String(String&& s) {
-  // TODO
-  str = String(s.str);
+	// An eine neue Adresse wird verschoben
+  size = s.size;
+  str = s.str;
   s.str = nullptr;
 }
 
@@ -123,7 +135,13 @@ Rückgabe:
 */
 
 char& String::operator[](int index) {
-  // TODO
+  
+	if (index < size && index >= 0) {
+		return *(str + index);
+	}
+
+	// Wenn Index "Out of bounds" ist, wird Zeiger auf null-Terminator gesetzt
+	return *(str + size);
 }
 
 
@@ -141,7 +159,21 @@ Rückgabe:
 */
 
 String& String::operator=(const String& s) {
-  // TODO
+  // Copy-Zuweisungsoperator
+	
+	// erzeuge neues kopierten String
+	char* tmpstr = new char[s.size];
+
+	for (int i = 0; i < s.size; i++) {
+		tmpstr[i] = s.str[i];
+	}
+
+	// free altes Speicher des Strings
+	delete str;
+	size = s.size;
+	str = tmpstr;
+
+	return *this;
   }
 
 
@@ -159,7 +191,13 @@ Rückgabe:
 */
 
 String& String::operator=(String&& s) {
-  // TODO
+	
+	if (str != s.str) {
+		delete str;
+		str = s.str;
+		s.str = nullptr;
+	}
+	return *this;
 }
 
 
@@ -178,5 +216,35 @@ Rückgabe:
 */
 
 String& String::operator+=(String& s) {
-  // TODO
+	
+	int new_size = size + s.size;
+	char *new_string = new char[new_size + 1];
+	int index = 0;
+
+	for (int i = 0; i < size; i++) {
+		new_string[index] = str[i];
+		index++;
+	} 
+
+	for (int i = 0; i < s.size; i++) {
+		new_string[index] = s.str[i];
+		index++;
+	}
+	new_string[index] = '\0';
+
+	delete str;
+	str = new char[new_size];
+	str = new_string;
+	size = new_size;
+
+	return *this;
 }
+
+int String::getSize() {
+    return size;
+}
+
+char* String::getString() {
+    return str;
+}
+

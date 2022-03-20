@@ -1,13 +1,14 @@
 all: program
+clear: clean
 
-program: my_String.o testFile.o
-	g++ my_String.o testFile.o -o tests
+program: String.o tests.o
+	g++ -std=c++0x String.o tests.o -o tests
 
-myString.o:	my_String.cpp
-	g++ -c myString.cpp -Wall
+String.o:	String.cpp
+	g++ -std=c++0x -c String.cpp -Wall
 
-testFile.o: testFile.cpp
-	g++ -c testFile.cpp -Wall
+tests.o: tests.cpp
+	g++ -std=c++0x -c tests.cpp -Wall
 
 clean:
-	rm *.o tests
+	erase *.o tests.exe 

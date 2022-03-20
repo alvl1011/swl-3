@@ -15,6 +15,9 @@ class String {
   String(String&&);
   ~String();
 
+  char* getString();
+  int getSize();
+
   char& operator[](int index);
   String& operator=(const String&);
     String& operator=(String&&);
